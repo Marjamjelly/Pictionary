@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiplayer Pictionary</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Multiplayer Pictionary</h1>
+    <div id="game-info">
+      <span id="round-info">Round: 1</span>
+      <span id="player-info">Your Role: Guesser</span>
+    </div>
+  </header>
+  <main>
+    <canvas id="drawingCanvas"></canvas>
+    <div id="controls">
+      <div id="chat">
+        <h3>Chat</h3>
+        <ul id="messages"></ul>
+        <input id="chat-input" type="text" placeholder="Type your guess..." />
+      </div>
+      <div id="tools">
+        <h3>Drawing Tools</h3>
+        <input type="color" id="color-picker" value="#000000" />
+        <input type="range" id="brush-size" min="1" max="10" value="5" />
+      </div>
+    </div>
+  </main>
+  <script src="firebase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
