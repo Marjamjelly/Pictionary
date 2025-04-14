@@ -8,33 +8,35 @@
 </head>
 <body>
   <header>
-    <h1>Multiplayer Pictionary</h1>
-    <div id="room-controls">
-      <input id="room-name" type="text" placeholder="Enter room name" />
-      <button id="join-room">Join Room</button>
-    </div>
-    <div id="game-info">
-      <span id="round-info">Round: 1</span>
-      <span id="player-info">Your Role: Guesser</span>
-    </div>
+    <h1>Welcome to Multiplayer Pictionary!</h1>
   </header>
   <main>
-    <canvas id="drawingCanvas"></canvas>
-    <div id="controls">
-      <div id="chat">
-        <h3>Chat</h3>
-        <ul id="messages"></ul>
-        <input id="chat-input" type="text" placeholder="Type your guess..." />
-      </div>
-      <div id="tools">
-        <h3>Drawing Tools</h3>
-        <input type="color" id="color-picker" value="#000000" />
-        <input type="range" id="brush-size" min="1" max="10" value="5" />
-      </div>
-    </div>
+    <section id="description">
+      <h2>How to Play</h2>
+      <p>
+        Multiplayer Pictionary is a fun drawing and guessing game you can play with friends! 
+        Here's how it works:
+      </p>
+      <ul>
+        <li>Create a room and share the room code with your friends.</li>
+        <li>Join a room using the room code shared by the host.</li>
+        <li>Wait in the lobby until the host starts the game.</li>
+        <li>Take turns drawing and guessing the given words. Points are awarded for correct guesses!</li>
+      </ul>
+    </section>
+    <section id="actions">
+      <h2>Get Started</h2>
+      <button id="create-room">Create a Room</button>
+      <button id="join-room">Join a Room</button>
+    </section>
+    <section id="room-controls" class="hidden">
+      <input id="room-name" type="text" placeholder="Enter room name or code" />
+      <button id="confirm-room">Confirm</button>
+    </section>
+    <section id="game-info" class="hidden">
+      <p id="room-code-display"></p>
+    </section>
   </main>
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 </body>

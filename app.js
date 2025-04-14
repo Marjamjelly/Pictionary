@@ -1,123 +1,67 @@
-const canvas = document.getElementById("drawingCanvas");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth * 0.8;
-canvas.height = window.innerHeight * 0.6;
-
-const roomControls = document.getElementById("room-controls");
-const roomNameInput = document.getElementById("room-name");
+const createRoomButton = document.getElementById("create-room");
 const joinRoomButton = document.getElementById("join-room");
+const confirmRoomButton = document.getElementById("confirm-room");
+const roomControlsSection = document.getElementById("room-controls");
+const roomNameInput = document.getElementById("room-name");
+const gameInfoSection = document.getElementById("game-info");
+const roomCodeDisplay = document.getElementById("room-code-display");
 
-// State variables
 let currentRoom = "";
-let drawing = false;
-let isDrawer = false; // True if the player is currently drawing
-let currentWord = "";
+let isCreatingRoom = false;
 
-// Join a room
+// Show room controls when "Create Room" or "Join Room" is clicked
+createRoomButton.addEventListener("click", () => {
+  isCreatingRoom = true;
+  roomControlsSection.classList.remove("hidden");
+});
+
 joinRoomButton.addEventListener("click", () => {
+  isCreatingRoom = false;
+  roomControlsSection.classList.remove("hidden");
+});
+
+// Confirm room creation or joining
+confirmRoomButton.addEventListener("click", () => {
   const roomName = roomNameInput.value.trim();
   if (!roomName) {
-    alert("Please enter a room name.");
+    alert("Please enter a room name or code.");
     return;
   }
 
-  currentRoom = roomName;
-  initializeRoom(currentRoom);
-});
-
-// Initialize room in Firebase
-function initializeRoom(roomName) {
-  const roomRef = db.ref(`rooms/${roomName}`);
-
-  // Create room if it doesn't exist
-  roomRef.once("value", (snapshot) => {
-    if (!snapshot.exists()) {
-      roomRef.set({
-        drawing: [],
-        chat: [],
-        players: [],
-        gameState: {
-          round: 1,
-          currentDrawer: "",
-          word: "",
-        },
-      });
-    }
-
-    // Add current player to the player list
-    roomRef.child("players").push("Player1"); // Replace "Player1" with the actual player name
-  });
-
-  // Listen for updates in the room
-  listenToRoom(roomName);
-}
-
-function listenToRoom(roomName) {
-  const roomRef = db.ref(`rooms/${roomName}`);
-
-  // Sync drawing data
-  roomRef.child("drawing").on("child_added", (snapshot) => {
-    const { x, y, color, size } = snapshot.val();
-    ctx.lineWidth = size;
-    ctx.strokeStyle = color;
-    ctx.lineTo(x, y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-  });
-
-  // Sync chat messages
-  roomRef.child("chat").on("child_added", (snapshot) => {
-    const { player, message } = snapshot.val();
-    const li = document.createElement("li");
-    li.textContent = `${player}: ${message}`;
-    document.getElementById("messages").appendChild(li);
-
-    // Check if the guess is correct
-    if (message.toLowerCase() === currentWord.toLowerCase() && !isDrawer) {
-      alert("You guessed the word!");
-    }
-  });
-}
-
-// Drawing event listeners
-canvas.addEventListener("mousedown", () => (drawing = true));
-canvas.addEventListener("mouseup", () => (drawing = false));
-canvas.addEventListener("mousemove", draw);
-
-function draw(event) {
-  if (!drawing || !isDrawer) return;
-  const x = event.clientX - canvas.offsetLeft;
-  const y = event.clientY - canvas.offsetTop;
-
-  // Draw locally
-  ctx.lineWidth = document.getElementById("brush-size").value;
-  ctx.strokeStyle = document.getElementById("color-picker").value;
-  ctx.lineCap = "round";
-  ctx.lineTo(x, y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-
-  // Update Firebase with drawing data for the current room
-  db.ref(`rooms/${currentRoom}/drawing`).push({
-    x,
-    y,
-    color: ctx.strokeStyle,
-    size: ctx.lineWidth,
-  });
-}
-
-// Chat functionality
-document.getElementById("chat-input").addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    const message = event.target.value;
-    db.ref(`rooms/${currentRoom}/chat`).push({
-      player: "Player1", // Replace "Player1" with the actual player name
-      message,
-    });
-    event.target.value = "";
+  if (isCreatingRoom) {
+    createRoom(roomName);
+  } else {
+    joinRoom(roomName);
   }
 });
 
-db.ref("test").set({ message: "Firebase is connected!" });
+function createRoom(roomName) {
+  currentRoom = roomName;
+  const roomRef = db.ref(`rooms/${roomName}`);
+  roomRef.set({
+    host: `Player-${Math.floor(Math.random() * 1000)}`,
+    players: {},
+    gameState: {
+      status: "lobby",
+    },
+  });
+
+  roomCodeDisplay.textContent = `Room Code: ${roomName}`;
+  gameInfoSection.classList.remove("hidden");
+  roomControlsSection.classList.add("hidden");
+}
+
+function joinRoom(roomName) {
+  currentRoom = roomName;
+  const roomRef = db.ref(`rooms/${roomName}`);
+
+  roomRef.once("value").then((snapshot) => {
+    if (snapshot.exists()) {
+      roomCodeDisplay.textContent = `Joined Room: ${roomName}`;
+      gameInfoSection.classList.remove("hidden");
+      roomControlsSection.classList.add("hidden");
+    } else {
+      alert("Room does not exist.");
+    }
+  });
+}
