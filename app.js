@@ -119,3 +119,5 @@ document.getElementById("chat-input").addEventListener("keydown", (event) => {
     event.target.value = "";
   }
 });
+
+db.ref("test").set({ message: "Firebase is connected!" });
