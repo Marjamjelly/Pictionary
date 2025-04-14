@@ -11,29 +11,26 @@
     <h1>Welcome to Multiplayer Pictionary!</h1>
   </header>
   <main>
-    <section id="description">
-      <h2>How to Play</h2>
-      <p>
-        Multiplayer Pictionary is a fun drawing and guessing game you can play with friends! 
-        Here's how it works:
-      </p>
-      <ul>
-        <li>Create a room and share the room code with your friends.</li>
-        <li>Join a room using the room code shared by the host.</li>
-        <li>Wait in the lobby until the host starts the game.</li>
-        <li>Take turns drawing and guessing the given words. Points are awarded for correct guesses!</li>
-      </ul>
+    <section id="auth-section">
+      <h2>Authentication</h2>
+      <div id="auth-controls">
+        <input id="email-input" type="email" placeholder="Email" />
+        <input id="password-input" type="password" placeholder="Password" />
+        <button id="login-button">Login</button>
+        <button id="signup-button">Sign Up</button>
+        <p id="auth-error" class="error hidden"></p>
+        <button id="logout-button" class="hidden">Logout</button>
+      </div>
+      <p id="auth-status">Not logged in.</p>
     </section>
-    <section id="actions">
-      <h2>Get Started</h2>
-      <button id="create-room">Create a Room</button>
-      <button id="join-room">Join a Room</button>
-    </section>
-    <section id="room-controls" class="hidden">
-      <input id="room-name" type="text" placeholder="Enter room name or code" />
-      <button id="confirm-room">Confirm</button>
-    </section>
-    <section id="game-info" class="hidden">
+    <section id="game-setup" class="hidden">
+      <h2>Game Setup</h2>
+      <button id="create-room">Create Room</button>
+      <button id="join-room">Join Room</button>
+      <div id="room-controls" class="hidden">
+        <input id="room-name" type="text" placeholder="Enter room name or code" />
+        <button id="confirm-room">Confirm</button>
+      </div>
       <p id="room-code-display"></p>
     </section>
   </main>
