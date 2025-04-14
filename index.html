@@ -9,6 +9,10 @@
 <body>
   <header>
     <h1>Multiplayer Pictionary</h1>
+    <div id="room-controls">
+      <input id="room-name" type="text" placeholder="Enter room name" />
+      <button id="join-room">Join Room</button>
+    </div>
     <div id="game-info">
       <span id="round-info">Round: 1</span>
       <span id="player-info">Your Role: Guesser</span>
@@ -29,6 +33,8 @@
       </div>
     </div>
   </main>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js"></script>
   <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 </body>
